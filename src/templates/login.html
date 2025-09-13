@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/styles/login.css') }}"
+    />
+  </head>
+  <body>
+    <body class="body">
+      <div class="login-container">
+        <h2 class="login-title">Iniciar Sesión</h2>
+        <form method="POST">
+          <input
+            type="text"
+            name="username"
+            placeholder="Usuario"
+            class="input-field"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            class="input-field"
+          />
+          <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+        {% if message %}
+        <p
+          class="login-message {{ 'success' if 'exitoso' in message else 'error' }}"
+        >
+          {{ message }}
+        </p>
+        {% endif %}
+      </div>
+    </body>
+  </body>
+</html>
