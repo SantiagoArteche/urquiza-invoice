@@ -1,4 +1,4 @@
-from database.mysql_database import database
+from data.mysql_db.init import database
 
 class InvoiceDetail(database.Model):
     id = database.Column(database.Integer, primary_key=True)
