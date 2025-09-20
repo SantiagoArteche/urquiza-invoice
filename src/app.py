@@ -2,11 +2,11 @@ import os
 from flask import Flask
 from presentation.auth.routes import auth_bp
 from data.mysql_db.init import database
-from data.models.client_model import Client
-from data.models.invoice_model import Invoice
-from data.models.invoice_detail_model import InvoiceDetail
-from data.models.product_model import Product
-from data.models.user_model import User
+from data.models.client import Client
+from data.models.invoice import Invoice
+from data.models.invoice_detail import InvoiceDetail
+from data.models.product import Product
+from data.models.user import User
 
 from dotenv import load_dotenv
 

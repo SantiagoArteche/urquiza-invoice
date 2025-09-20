@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from data.models.user_model import User
+from data.models.user import User
 
 auth_bp = Blueprint("auth", __name__, template_folder='../templates')
 
