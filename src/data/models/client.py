@@ -7,5 +7,35 @@ class Client(database.Model):
     phone = database.Column(database.String(50), nullable=False)
     email = database.Column(database.String(50), nullable=False)
 
+
+    @classmethod
+    def create(cls, name, address, email, phone):
+        new_client = cls(name=name, address=address, email=email, phone=phone)
+        database.session.add(new_client)
+        database.session.commit()
+        return new_client
+    
+    @classmethod
+    def delete(cls, client):
+        try:
+            database.session.delete(client)
+            database.session.commit()
+            return True
+        except Exception:
+            database.session.rollback()   # revertimos si hay error
+            return False
+
+    @classmethod
+    def update(cls, client_id, new_data: dict):
+        try:
+            updated = cls.query.filter_by(id=client_id).update(new_data)
+            if not updated:
+                return False 
+            database.session.commit()
+            return True
+        except Exception:
+            database.session.rollback()
+            return False
+
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<Client {self.name}>'
