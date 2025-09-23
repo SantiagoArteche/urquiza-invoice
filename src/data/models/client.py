@@ -22,7 +22,7 @@ class Client(database.Model):
             database.session.commit()
             return True
         except Exception:
-            database.session.rollback()   # revertimos si hay error
+            database.session.rollback()
             return False
 
     @classmethod
