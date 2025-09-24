@@ -1,12 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for
 from data.models.client import Client
+from datetime import datetime
+import locale
+
+locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+current_date = datetime.now().strftime("%d de %B de %Y") 
 
 client_bp = Blueprint("client", __name__, template_folder='../templates')
 
 @client_bp.route("/client", methods=['GET'])
 def list():
     clients = Client.query.all()
-    return render_template('client-list.html', clients=clients)
+    return render_template('client-list.html', clients=clients, current_date=current_date)
 
 @client_bp.route("/client/create", methods=['GET', 'POST'])
 def create():

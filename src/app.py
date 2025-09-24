@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, url_for, redirect
 from presentation.auth.routes import auth_bp
 from presentation.client.routes import client_bp
 from data.mysql_db.init import database
@@ -8,6 +8,12 @@ from data.models.invoice import Invoice
 from data.models.invoice_detail import InvoiceDetail
 from data.models.product import Product
 from data.models.user import User
+from datetime import datetime
+import locale
+
+
+locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+current_date = datetime.now().strftime("%d de %B de %Y") 
 
 from dotenv import load_dotenv
 
@@ -23,7 +29,7 @@ app.register_blueprint(client_bp)
 
 @app.route("/")
 def running():
-    return "<p>The server is running</p>"
+    return redirect(url_for('auth.login'))
 
 if __name__ == "__main__":
     app.run(debug=True)

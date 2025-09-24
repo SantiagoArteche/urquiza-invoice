@@ -1,5 +1,10 @@
 from flask import Blueprint, render_template, request
 from data.models.user import User
+from datetime import datetime
+import locale
+
+locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+current_date = datetime.now().strftime("%d de %B de %Y") 
 
 auth_bp = Blueprint("auth", __name__, template_folder='../templates')
 
@@ -11,6 +16,7 @@ def login():
         name = request.form.get("name")
         password = request.form.get("password")
 
+        print('here')
         found_user = User.query.filter_by(name=name).first()
 
         error = False
@@ -40,6 +46,6 @@ def register():
 
         return render_template('login.html', message='Usuario registrado exitosamente')
 
-@auth_bp.route("/home", methods=['GET'])
+@auth_bp.route("/home", methods=['GET', 'POST'])
 def dashboard():
-    return render_template('home.html')
+    return render_template('home.html', current_date=current_date)
