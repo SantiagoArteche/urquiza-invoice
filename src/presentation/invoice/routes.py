@@ -146,3 +146,13 @@ def remove_product(detail_id):
         return redirect(url_for('invoice.edit', invoice_id=invoice_id))
     except Exception as e:
         return redirect(url_for('invoice.edit', invoice_id=invoice_id))
+    
+
+@invoice_bp.route("/invoice/detail/<int:invoice_id>", methods=['GET'])
+def detail(invoice_id):
+    invoice = Invoice.query.get_or_404(invoice_id)
+    
+    clients = Client.query.all()
+    products = Product.query.all()
+    details = InvoiceDetail.query.filter_by(invoice_id=invoice_id).all()
+    return render_template('invoice-detail.html', invoice=invoice, clients=clients, products=products, details=details)
