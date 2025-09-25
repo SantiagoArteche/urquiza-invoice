@@ -68,7 +68,6 @@ def edit(product_id):
         stock = request.form.get("stock")
         
         error = False
-        message = ""
         
         if not description or not price or not stock:
             error = True
@@ -98,7 +97,7 @@ def edit(product_id):
             except Exception as e:
                 error = True
         
-        return redirect(url_for('product.list'))
+        return redirect(url_for('product.list', message=message))
 
 @product_bp.route("/product/delete/<int:product_id>", methods=['POST'])
 def delete(product_id):

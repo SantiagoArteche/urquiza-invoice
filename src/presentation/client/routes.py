@@ -78,7 +78,7 @@ def edit(client_id):
             except Exception as e:
                 error = True
         
-        return redirect(url_for('client.list'))
+        return redirect(url_for('client.list', message=message))
 
 @client_bp.route("/client/delete/<int:client_id>", methods=['POST'])
 def delete(client_id):
@@ -88,4 +88,4 @@ def delete(client_id):
         Client.delete(client=client)
         return redirect(url_for('client.list'))
     except Exception as e:
-        return redirect(url_for('client.list'))
+        return redirect(url_for('client.list', message="Error al eliminar cliente"))
