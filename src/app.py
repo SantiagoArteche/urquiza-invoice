@@ -3,6 +3,7 @@ from flask import Flask, url_for, redirect
 from presentation.auth.routes import auth_bp
 from presentation.client.routes import client_bp
 from presentation.product.routes import product_bp
+from presentation.invoice.routes import invoice_bp
 from data.mysql_db.init import database
 from data.models.client import Client
 from data.models.invoice import Invoice
@@ -28,6 +29,7 @@ database.init_app(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(client_bp)
 app.register_blueprint(product_bp)
+app.register_blueprint(invoice_bp)
 
 @app.route("/")
 def running():
