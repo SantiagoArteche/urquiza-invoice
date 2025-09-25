@@ -25,8 +25,6 @@
           </div>
           <div class="col-md-6 text-md-end">
             <div class="text-white-50">
-              <i class="fas fa-user-circle me-2"></i>
-              <span>Bienvenido, Usuario</span>
               <span class="ms-3">
                 <i class="fas fa-calendar me-1"></i>
                 <span id="current-date">{{ current_date }}</span>
@@ -67,19 +65,27 @@
         >
           <div class="row text-center">
             <div class="col-md-3 col-6 mb-3 mb-md-0">
-              <div class="text-primary display-4 fw-bold">150</div>
+              <div class="text-primary display-4 fw-bold">
+                {{clients_length}}
+              </div>
               <div class="text-white-50 small">Clientes Activos</div>
             </div>
             <div class="col-md-3 col-6 mb-3 mb-md-0">
-              <div class="text-primary display-4 fw-bold">89</div>
+              <div class="text-primary display-4 fw-bold">
+                {{products_length}}
+              </div>
               <div class="text-white-50 small">Productos</div>
             </div>
             <div class="col-md-3 col-6 mb-3 mb-md-0">
-              <div class="text-primary display-4 fw-bold">24</div>
+              <div class="text-primary display-4 fw-bold">
+                {{invoices_length}}
+              </div>
               <div class="text-white-50 small">Facturas Este Mes</div>
             </div>
             <div class="col-md-3 col-6">
-              <div class="text-primary display-4 fw-bold">$45,280</div>
+              <div class="text-primary display-4 fw-bold">
+                ${{invoices_total}}
+              </div>
               <div class="text-white-50 small">Ingresos Totales</div>
             </div>
           </div>
@@ -200,8 +206,7 @@
                   Listado de Facturas
                 </h3>
                 <p class="card-text text-muted mb-4 flex-grow-1">
-                  Consulta todas las facturas emitidas. Busca, filtra y
-                  visualiza detalles completos.
+                  Consulta todas las facturas emitidas.
                 </p>
                 <a
                   href="{{ url_for('invoice.list')}}"

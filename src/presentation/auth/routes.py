@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template, request
 from data.models.user import User
+from data.models.client import Client
+from data.models.product import Product
+from data.models.invoice import Invoice
 from datetime import datetime
+from sqlalchemy import extract
 import locale
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
@@ -48,4 +52,15 @@ def register():
 
 @auth_bp.route("/home", methods=['GET', 'POST'])
 def dashboard():
-    return render_template('home.html', current_date=current_date)
+    clients = Client.query.all()
+    products = Product.query.all()
+    invoices = Invoice.query.all()
+    today = datetime.today()
+    this_month_invoices = (
+        Invoice.query
+        .filter(extract('year', Invoice.date) == today.year)
+        .filter(extract('month', Invoice.date) == today.month)
+        .all()
+    )
+    invoices_total = sum(invoice.total for invoice in invoices)
+    return render_template('home.html', current_date=current_date, clients_length=len(clients), products_length=len(products), invoices_length=len(this_month_invoices), invoices_total=invoices_total)
