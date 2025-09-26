@@ -4,6 +4,7 @@ from presentation.auth.routes import auth_bp
 from presentation.client.routes import client_bp
 from presentation.product.routes import product_bp
 from presentation.invoice.routes import invoice_bp
+from presentation.reports.routes import reports_bp
 from data.mysql_db.init import database
 from data.models.client import Client
 from data.models.invoice import Invoice
@@ -30,6 +31,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(client_bp)
 app.register_blueprint(product_bp)
 app.register_blueprint(invoice_bp)
+app.register_blueprint(reports_bp)
 
 @app.route("/")
 def running():
