@@ -20,7 +20,6 @@ def login():
         name = request.form.get("name")
         password = request.form.get("password")
 
-        print('here')
         found_user = User.query.filter_by(name=name).first()
 
         error = False

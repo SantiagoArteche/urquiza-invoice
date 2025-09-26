@@ -9,8 +9,6 @@ class InvoiceDetail(database.Model):
     subtotal = database.Column(database.Integer, nullable=False)
     product = database.relationship('Product', backref='invoice_details')
 
-
-    
     @classmethod
     def create(cls, invoice_id, product_id, quantity, unit_price):
         subtotal = quantity * unit_price

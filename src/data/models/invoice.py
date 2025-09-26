@@ -36,8 +36,12 @@ class Invoice(database.Model):
     
     @classmethod
     def delete(cls, invoice):
-        database.session.delete(invoice)
-        database.session.commit()
+        try:
+            database.session.delete(invoice)
+            database.session.commit()
+        except Exception:
+            database.session.rollback()
+            return False
     
     def calculate_total(self):
         total = sum(detail.subtotal for detail in self.details)

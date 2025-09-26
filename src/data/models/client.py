@@ -1,4 +1,6 @@
 from data.mysql_db.init import database
+from data.models.invoice_detail import InvoiceDetail
+
 
 class Client(database.Model):
     id = database.Column(database.Integer, primary_key=True)
@@ -17,7 +19,17 @@ class Client(database.Model):
     
     @classmethod
     def delete(cls, client):
+        from data.models.invoice import Invoice
+        found_invoices = Invoice.query.filter(Invoice.client_id == client.id).all()
+
         try:
+            if(len(found_invoices)):
+                for invoice in found_invoices:
+                    found_invoices_detail = Invoice.query.filter(InvoiceDetail.invoice_id == invoice.id).all()
+                    for invoice_detail in found_invoices_detail:
+                        database.session.delete(invoice_detail)
+                    database.session.delete(invoice)
+                    
             database.session.delete(client)
             database.session.commit()
             return True

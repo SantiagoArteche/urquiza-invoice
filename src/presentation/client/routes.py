@@ -60,7 +60,6 @@ def edit(client_id):
         
         error = False
         message = ""
-        print(client_id)
         if not name or not email:
             error = True
             message = 'Nombre y email son campos obligatorios'
