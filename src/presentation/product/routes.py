@@ -16,7 +16,7 @@ def list():
 @product_bp.route("/product/create", methods=['GET', 'POST'])
 def create():
     if request.method == 'GET':
-        return render_template('create-product.html')
+        return render_template('create-product.html', current_date=current_date)
     else:
         description = request.form.get("description")
         price = request.form.get("price")
@@ -49,19 +49,19 @@ def create():
         if not error:
             try:
                 Product.create(description, price, stock)
-                return render_template('create-product.html', success_message='Producto creado exitosamente')
+                return render_template('create-product.html', success_message='Producto creado exitosamente', current_date=current_date)
             except Exception as e:
                 error = True
                 message = 'Error al crear el producto'
         
-        return render_template('create-product.html', message=message)
+        return render_template('create-product.html', message=message, current_date=current_date)
 
 @product_bp.route("/product/edit/<int:product_id>", methods=['GET', 'POST'])
 def edit(product_id):
     product = Product.query.get_or_404(product_id)
     
     if request.method == 'GET':
-        return render_template('edit-product.html', product=product)
+        return render_template('edit-product.html', product=product, current_date=current_date)
     else:
         description = request.form.get("description")
         price = request.form.get("price")
@@ -93,11 +93,11 @@ def edit(product_id):
         if not error:
             try:
                 Product.update(found_product.id, {"description": description, "price": price, "stock": stock})
-                return redirect(url_for('product.list'))
+                return redirect(url_for('product.list', current_date=current_date))
             except Exception as e:
                 error = True
         
-        return redirect(url_for('product.list', message=message))
+        return redirect(url_for('product.list', message=message, current_date=current_date))
 
 @product_bp.route("/product/delete/<int:product_id>", methods=['POST'])
 def delete(product_id):
@@ -105,6 +105,6 @@ def delete(product_id):
     
     try:
         Product.delete(product=product)
-        return redirect(url_for('product.list'))
+        return redirect(url_for('product.list', current_date=current_date))
     except Exception as e:
-        return redirect(url_for('product.list'))
+        return redirect(url_for('product.list', current_date=current_date))
