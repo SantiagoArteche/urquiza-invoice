@@ -19,7 +19,7 @@ def list():
 def create():
     if request.method == 'GET':
         clients = Client.query.all()
-        return render_template('create-invoice.html', clients=clients, datetime=datetime)
+        return render_template('create-invoice.html', clients=clients, datetime=datetime, current_date=current_date)
     else:
         client_id = request.form.get("client_id")
         date = request.form.get("date")
@@ -51,13 +51,13 @@ def create():
         if not error:
             try:
                 invoice = Invoice.create(client_id, date, 0)
-                return redirect(url_for('invoice.edit', invoice_id=invoice.id))
+                return redirect(url_for('invoice.edit', invoice_id=invoice.id, current_date=current_date))
             except Exception as e:
                 error = True
                 message = 'Error al crear la factura'
         
         clients = Client.query.all()
-        return render_template('create-invoice.html', clients=clients, message=message)
+        return render_template('create-invoice.html', clients=clients, message=message, current_date=current_date)
 
 @invoice_bp.route("/invoice/edit/<int:invoice_id>", methods=['GET', 'POST'])
 def edit(invoice_id):
@@ -67,7 +67,7 @@ def edit(invoice_id):
         clients = Client.query.all()
         products = Product.query.all()
         details = InvoiceDetail.query.filter_by(invoice_id=invoice_id).all()
-        return render_template('edit-invoice.html', invoice=invoice, clients=clients, products=products, details=details)
+        return render_template('edit-invoice.html', invoice=invoice, clients=clients, products=products, details=details, current_date=current_date)
     else:
         client_id = request.form.get("client_id")
         date = request.form.get("date")
@@ -96,7 +96,7 @@ def edit(invoice_id):
             try:
                 Invoice.update(invoice.id, {"client_id": client_id, "date": date})
                 invoice.calculate_total()
-                return redirect(url_for('invoice.list'))
+                return redirect(url_for('invoice.list', current_date=current_date))
             except Exception as e:
                 error = True
                 message = 'Error al actualizar la factura'
@@ -104,7 +104,7 @@ def edit(invoice_id):
         clients = Client.query.all()
         products = Product.query.all()
         details = InvoiceDetail.query.filter_by(invoice_id=invoice_id).all()
-        return render_template('edit-invoice.html', invoice=invoice, clients=clients, products=products, details=details, message=message)
+        return render_template('edit-invoice.html', invoice=invoice, clients=clients, products=products, details=details, message=message, current_date=current_date)
 
 @invoice_bp.route("/invoice/delete/<int:invoice_id>", methods=['POST'])
 def delete(invoice_id):
@@ -112,9 +112,9 @@ def delete(invoice_id):
     
     try:
         Invoice.delete(invoice=invoice)
-        return redirect(url_for('invoice.list'))
+        return redirect(url_for('invoice.list', current_date=current_date))
     except Exception as e:
-        return redirect(url_for('invoice.list'))
+        return redirect(url_for('invoice.list', current_date=current_date))
 
 @invoice_bp.route("/invoice/<int:invoice_id>/add-product", methods=['POST'])
 def add_product(invoice_id):
@@ -123,14 +123,14 @@ def add_product(invoice_id):
         quantity = int(request.form.get('quantity'))
         unit_price = int(request.form.get('unit_price'))
         
-        detail = InvoiceDetail.create(invoice_id, product_id, quantity, unit_price)
+        InvoiceDetail.create(invoice_id, product_id, quantity, unit_price)
         
         invoice = Invoice.query.get(invoice_id)
         invoice.calculate_total()
         
-        return redirect(url_for('invoice.edit', invoice_id=invoice_id))
+        return redirect(url_for('invoice.edit', invoice_id=invoice_id, current_date=current_date))
     except Exception as e:
-        return redirect(url_for('invoice.edit', invoice_id=invoice_id))
+        return redirect(url_for('invoice.edit', invoice_id=invoice_id, current_date=current_date))
 
 @invoice_bp.route("/invoice/detail/<int:detail_id>/remove", methods=['POST'])
 def remove_product(detail_id):
@@ -143,9 +143,9 @@ def remove_product(detail_id):
         invoice = Invoice.query.get(invoice_id)
         invoice.calculate_total()
         
-        return redirect(url_for('invoice.edit', invoice_id=invoice_id))
+        return redirect(url_for('invoice.edit', invoice_id=invoice_id, current_date=current_date))
     except Exception as e:
-        return redirect(url_for('invoice.edit', invoice_id=invoice_id))
+        return redirect(url_for('invoice.edit', invoice_id=invoice_id, current_date=current_date))
     
 
 @invoice_bp.route("/invoice/detail/<int:invoice_id>", methods=['GET'])
@@ -155,4 +155,4 @@ def detail(invoice_id):
     clients = Client.query.all()
     products = Product.query.all()
     details = InvoiceDetail.query.filter_by(invoice_id=invoice_id).all()
-    return render_template('invoice-detail.html', invoice=invoice, clients=clients, products=products, details=details)
+    return render_template('invoice-detail.html', invoice=invoice, clients=clients, products=products, details=details, current_date=current_date)
