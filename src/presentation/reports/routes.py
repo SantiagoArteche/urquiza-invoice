@@ -15,7 +15,7 @@ reports_bp = Blueprint("reports", __name__, template_folder='../templates')
 @reports_bp.route("/reports", methods=['GET'])
 def reports():
     clients = Client.query.all()
-    return render_template('reports.html', clients=clients)
+    return render_template('reports.html', clients=clients, current_date=current_date)
 
 
 @reports_bp.route('/reports/client', methods=['POST'])
@@ -26,7 +26,7 @@ def client_report():
         if not client_id:
             flash('Debe seleccionar un cliente', 'error')
             clients = Client.query.all()
-            return render_template('reports.html', clients=clients, message='Debe seleccionar un cliente')
+            return render_template('reports.html', clients=clients, message='Debe seleccionar un cliente', current_date=current_date)
         
         client_invoices = database.session.query(
             Invoice.id,
@@ -41,12 +41,12 @@ def client_report():
         
         clients = Client.query.all()
         
-        return render_template('reports.html', clients=clients, client_invoices=client_invoices, client_total=client_total, selected_client_id=int(client_id))
+        return render_template('reports.html', clients=clients, client_invoices=client_invoices, client_total=client_total, selected_client_id=int(client_id), current_date=current_date)
 
     except Exception as e:
         flash(f'Error al generar el reporte: {str(e)}', 'error')
         clients = Client.query.all()
-        return render_template('reports.html', clients=clients, message=f'Error al generar el reporte: {str(e)}')
+        return render_template('reports.html', clients=clients, message=f'Error al generar el reporte: {str(e)}', current_date=current_date)
 
 @reports_bp.route('/reports/period', methods=['POST'])
 def period_report():
@@ -57,7 +57,7 @@ def period_report():
         if not year or not quarter:
             flash('Debe seleccionar año y trimestre', 'error')
             clients = Client.query.all()
-            return render_template('reports.html', clients=clients, message='Debe seleccionar año y trimestre')
+            return render_template('reports.html', clients=clients, message='Debe seleccionar año y trimestre', current_date=current_date)
         
         year = int(year)
         quarter = int(quarter)
@@ -87,10 +87,10 @@ def period_report():
         clients = Client.query.all()
         
         return render_template('reports.html', clients=clients, period_data=True, period_invoices=period_invoices, 
-                period_total=period_total, period_count=period_count, selected_year=year, selected_quarter=quarter)
+                period_total=period_total, period_count=period_count, selected_year=year, selected_quarter=quarter, current_date=current_date)
 
     except Exception as e:
         flash(f'Error al generar el reporte: {str(e)}', 'error')
         clients = Client.query.all()
-        return render_template('reports.html', clients=clients, message=f'Error al generar el reporte: {str(e)}')
+        return render_template('reports.html', clients=clients, message=f'Error al generar el reporte: {str(e)}', current_date=current_date)
 
