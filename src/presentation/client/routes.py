@@ -38,7 +38,7 @@ def create():
         
         if not error:
             try:
-                Client.create(name, email, phone, address)
+                Client.create(name, address,  email, phone)
                 return render_template('create-client.html', success_message='Cliente creado exitosamente')
             except Exception as e:
                 error = True

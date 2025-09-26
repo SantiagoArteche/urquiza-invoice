@@ -6,13 +6,13 @@ class Client(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     name = database.Column(database.String(80), unique=True, nullable=False)
     address = database.Column(database.String(120), nullable=False)
-    phone = database.Column(database.String(50), nullable=False)
     email = database.Column(database.String(50), nullable=False)
+    phone = database.Column(database.String(50), nullable=False)
 
 
     @classmethod
     def create(cls, name, address, email, phone):
-        new_client = cls(name=name, address=address, email=email, phone=phone)
+        new_client = cls(name=name, address=address, phone=phone, email=email)
         database.session.add(new_client)
         database.session.commit()
         return new_client

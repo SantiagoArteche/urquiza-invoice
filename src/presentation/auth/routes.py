@@ -32,7 +32,18 @@ def login():
             message = 'Credenciales incorrectas'
         
         if not error:
-            return render_template('home.html')
+            clients = Client.query.all()
+            products = Product.query.all()
+            invoices = Invoice.query.all()
+            today = datetime.today()
+            this_month_invoices = (
+                Invoice.query
+                .filter(extract('year', Invoice.date) == today.year)
+                .filter(extract('month', Invoice.date) == today.month)
+                .all()
+            )
+            invoices_total = sum(invoice.total for invoice in invoices)
+            return render_template('home.html' , current_date=current_date, clients_length=len(clients), products_length=len(products), invoices_length=len(this_month_invoices), invoices_total=invoices_total)
         
         return render_template('login.html', message=message)
     
