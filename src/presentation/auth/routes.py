@@ -57,6 +57,15 @@ def register():
         password = request.form.get("password")
         email = request.form.get("email")
         rol = request.form.get("rol")
+
+        if User.query.filter_by(email=email).first():
+            message = 'El correo electrónico ya está en uso'
+            return render_template('register.html', message=message)
+
+        if User.query.filter_by(name=name).first():
+            message = 'El nombre de usuario ya está en uso'
+            return render_template('register.html', message=message)
+
         User.create(name, password, email, rol)
         return redirect(url_for('auth.login', message='Usuario registrado exitosamente'))
 
